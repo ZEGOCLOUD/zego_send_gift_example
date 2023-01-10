@@ -86,21 +86,25 @@ class ViewController: UIViewController {
         liveAudioVC.delegate = self
         let backgroundView: LiveAudioHeaderView = LiveAudioHeaderView(frame: CGRect(x: 0, y: 0, width: liveAudioVC.view.frame.width, height: liveAudioVC.view.frame.height))
         backgroundView.setHeadContent("Live Audio Room", roomID: String(format: "ID: %@", self.roomIDTextField.text ?? ""), image: UIImage())
+        //add send gift button to bottom bar
         let giftButton: UIButton = UIButton()
+        giftButton.backgroundColor = UIColor.red
         giftButton.setTitle("sendGift", for: .normal)
         giftButton.addTarget(self, action: #selector(sendGift), for: .touchUpInside)
         liveAudioVC.addButtonToMenuBar(giftButton, role: .audience)
         liveAudioVC.addButtonToMenuBar(giftButton, role: .speaker)
         liveAudioVC.setBackgroundView(backgroundView)
         self.present(liveAudioVC, animated: true)
-        ZegoUIKit.shared.addEventHandler(self)
+        ZegoUIKit.shared.addEventHandler(self)//add ZegoUIKit listener
         self.liveAudioRoomVC = liveAudioVC
         self.liveAudioRoomVC?.view.addSubview(self.svgPlayer)
     }
     
     @objc func sendGift() {
+        //send gift use sendInRoomCommand api
         ZegoUIKit.shared.sendInRoomCommand("GIFT", toUserIDs: ["101"]) { errorCode in
             if errorCode == 0 {
+                //show gift animation
                 self.svgPlayer.frame = CGRect.init(x: 0, y: UIScreen.main.bounds.size.height - 400, width: UIScreen.main.bounds.size.width, height: 300)
                     self.parser.parse(withNamed: "sports-car", in: nil) { videoItem in
                     self.svgPlayer.videoItem = videoItem
@@ -118,11 +122,13 @@ extension ViewController: ZegoUIKitPrebuiltLiveAudioRoomVCDelegate,ZegoUIKitEven
         
     }
     
+    //MARK: -ZegoUIKitEventHandle
     func onInRoomTextMessageReceived(_ messages: [ZegoSignalingInRoomTextMessage], roomID: String) {
         if let message = messages.first,
            let senderUserID = message.senderUserID
         {
             if senderUserID != self.UserIDTextField.text {
+                //show gift animation
                 self.svgPlayer.frame = CGRect.init(x: 0, y: UIScreen.main.bounds.size.height - 400, width: UIScreen.main.bounds.size.width, height: 300)
                 self.parser.parse(withNamed: "sports-car", in: nil) { videoItem in
                     self.svgPlayer.videoItem = videoItem
@@ -134,6 +140,7 @@ extension ViewController: ZegoUIKitPrebuiltLiveAudioRoomVCDelegate,ZegoUIKitEven
     
     func onInRoomCommandReceived(_ fromUser: ZegoUIKitUser, command: String) {
         if fromUser.userID != self.UserIDTextField.text {
+            //show gift animation
             self.svgPlayer.frame = CGRect.init(x: 0, y: UIScreen.main.bounds.size.height - 400, width: UIScreen.main.bounds.size.width, height: 300)
             self.parser.parse(withNamed: "sports-car", in: nil) { videoItem in
                     self.svgPlayer.videoItem = videoItem
