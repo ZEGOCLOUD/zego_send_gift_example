@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import androidx.annotation.NonNull;
@@ -72,7 +74,7 @@ public class LiveAudioRoomActivity extends AppCompatActivity {
         SVGAParser.Companion.shareParser().init(this);
 
         ImageView imageView = new ImageView(this);
-        imageView.setImageResource(com.zegocloud.uikit.R.drawable.icon_hangup);
+        imageView.setImageResource(R.drawable.presents_icon);
         int size = Utils.dp2px(36f, getResources().getDisplayMetrics());
         int marginTop = Utils.dp2px(10f, getResources().getDisplayMetrics());
         int marginBottom = Utils.dp2px(16f, getResources().getDisplayMetrics());
@@ -104,7 +106,7 @@ public class LiveAudioRoomActivity extends AppCompatActivity {
             new Thread() {
                 public void run() {
                     // when post success,show send gift animation
-                    httpPost(path, jsonString, () -> showAnimation("sports-car.svga", roomBackgroundView));
+                    httpPost(path, jsonString, () -> showAnimation("sports-car.svga"));
                 }
             }.start();
         });
@@ -117,7 +119,7 @@ public class LiveAudioRoomActivity extends AppCompatActivity {
                     "onInRoomCommandReceived() called with: fromUser = [" + fromUser + "], command = [" + command
                         + "]");
                 if (!fromUser.userID.equals(userID) && command.contains("gift_type")) {
-                    showAnimation("sports-car.svga", roomBackgroundView);
+                    showAnimation("sports-car.svga");
                 }
             }
         });
@@ -128,7 +130,7 @@ public class LiveAudioRoomActivity extends AppCompatActivity {
             if (!messages.isEmpty()) {
                 ZegoSignalingInRoomTextMessage message = messages.get(0);
                 if (!message.senderUserID.equals(userID)) {
-                    showAnimation("sports-car.svga", roomBackgroundView);
+                    showAnimation("sports-car.svga");
                 }
             }
         });
@@ -180,13 +182,14 @@ public class LiveAudioRoomActivity extends AppCompatActivity {
         }
     }
 
-    private void showAnimation(String filename, AudioRoomBackgroundView roomBackgroundView) {
+    private void showAnimation(String filename) {
+        ViewGroup rootLayout = findViewById(R.id.layout);
         SVGAParser.Companion.shareParser().decodeFromAssets(filename, new ParseCompletion() {
             @Override
             public void onComplete(@NonNull SVGAVideoEntity svgaVideoEntity) {
                 SVGAImageView svgaImageView = new SVGAImageView(LiveAudioRoomActivity.this);
                 svgaImageView.setLoops(1);
-                roomBackgroundView.addView(svgaImageView);
+                rootLayout.addView(svgaImageView);
                 svgaImageView.setVideoItem(svgaVideoEntity);
                 svgaImageView.stepToFrame(0, true);
                 svgaImageView.setCallback(new SVGACallback() {
@@ -197,7 +200,7 @@ public class LiveAudioRoomActivity extends AppCompatActivity {
 
                     @Override
                     public void onFinished() {
-                        roomBackgroundView.removeView(svgaImageView);
+                        rootLayout.removeView(svgaImageView);
                     }
 
                     @Override
