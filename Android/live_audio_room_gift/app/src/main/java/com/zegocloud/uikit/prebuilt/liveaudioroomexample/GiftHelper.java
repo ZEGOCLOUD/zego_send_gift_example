@@ -83,7 +83,7 @@ public class GiftHelper {
 
     public void addGiftButton(Context context, ZegoUIKitPrebuiltLiveAudioRoomFragment fragment) {
         ImageView imageView = new ImageView(context);
-        imageView.setImageResource(com.zegocloud.uikit.R.drawable.icon_hangup);
+        imageView.setImageResource(R.drawable.presents_icon);
         int size = Utils.dp2px(36f, context.getResources().getDisplayMetrics());
         int marginTop = Utils.dp2px(10f, context.getResources().getDisplayMetrics());
         int marginBottom = Utils.dp2px(16f, context.getResources().getDisplayMetrics());

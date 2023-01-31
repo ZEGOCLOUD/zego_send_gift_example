@@ -34,8 +34,6 @@ import org.json.JSONObject;
 
 public class LiveAudioRoomActivity extends AppCompatActivity {
 
-    private Handler handler = new Handler(Looper.getMainLooper());
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
