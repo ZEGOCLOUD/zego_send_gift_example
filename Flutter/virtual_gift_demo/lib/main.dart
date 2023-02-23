@@ -1,7 +1,6 @@
 // Dart imports:
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 // Flutter imports:
@@ -126,7 +125,7 @@ class _LivePageState extends State<LivePage> {
       subscriptions
         ..add(ZegoUIKit()
             .getSignalingPlugin()
-            .getInRoomTextMessageStream()
+            .getInRoomTextMessageReceivedEventStream()
             .listen(onInRoomTextMessageReceived))
         ..add(ZegoUIKit()
             .getInRoomCommandReceivedStream()
@@ -144,7 +143,8 @@ class _LivePageState extends State<LivePage> {
 
   // if you use reliable message channel, you need subscription this method.
   void onInRoomTextMessageReceived(
-      List<ZegoSignalingInRoomTextMessage> messages) {
+      ZegoSignalingPluginInRoomTextMessageReceivedEvent event) {
+    final messages = event.messages;
     debugPrint("onInRoomTextMessageStream:$messages");
     // You can display different animations according to gift-type
     var message = messages.first;
@@ -263,7 +263,7 @@ class GiftWidget extends StatefulWidget {
       );
     });
 
-    Overlay.of(context, rootOverlay: false)!.insert(currentGiftEntries!);
+    Overlay.of(context, rootOverlay: false).insert(currentGiftEntries!);
   }
 
   static bool clear() {
