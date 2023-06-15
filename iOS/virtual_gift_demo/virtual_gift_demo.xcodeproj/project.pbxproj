@@ -15,10 +15,11 @@
 		865853CE296BFF9B00AAF955 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 865853CC296BFF9B00AAF955 /* LaunchScreen.storyboard */; };
 		865853D6296C020600AAF955 /* LiveAudioHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865853D5296C020600AAF955 /* LiveAudioHeaderView.swift */; };
 		865853D8296C0E9800AAF955 /* sports-car.svga in Resources */ = {isa = PBXBuildFile; fileRef = 865853D7296C0E9800AAF955 /* sports-car.svga */; };
-		A2B665C352CA119AB82823BF /* Pods_virtual_gift_demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F06F4C7AA83B8B2DE8A4D2D /* Pods_virtual_gift_demo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		15024B7D42C866F2E388B00A /* Pods-virtual_gift_demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual_gift_demo.release.xcconfig"; path = "Target Support Files/Pods-virtual_gift_demo/Pods-virtual_gift_demo.release.xcconfig"; sourceTree = "<group>"; };
+		3F012DB4A8187A7652E84930 /* Pods-virtual_gift_demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual_gift_demo.debug.xcconfig"; path = "Target Support Files/Pods-virtual_gift_demo/Pods-virtual_gift_demo.debug.xcconfig"; sourceTree = "<group>"; };
 		865853BE296BFF9900AAF955 /* virtual_gift_demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = virtual_gift_demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		865853C1296BFF9900AAF955 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		865853C3296BFF9900AAF955 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -30,8 +31,6 @@
 		865853D5296C020600AAF955 /* LiveAudioHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveAudioHeaderView.swift; sourceTree = "<group>"; };
 		865853D7296C0E9800AAF955 /* sports-car.svga */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sports-car.svga"; sourceTree = "<group>"; };
 		9F06F4C7AA83B8B2DE8A4D2D /* Pods_virtual_gift_demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_virtual_gift_demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B8F3EEC1A016106D70FD2765 /* Pods-virtual_gift_demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual_gift_demo.release.xcconfig"; path = "Target Support Files/Pods-virtual_gift_demo/Pods-virtual_gift_demo.release.xcconfig"; sourceTree = "<group>"; };
-		D718AC2DF01D66F072BBFFDD /* Pods-virtual_gift_demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual_gift_demo.debug.xcconfig"; path = "Target Support Files/Pods-virtual_gift_demo/Pods-virtual_gift_demo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,7 +38,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A2B665C352CA119AB82823BF /* Pods_virtual_gift_demo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,8 +57,8 @@
 			children = (
 				865853C0296BFF9900AAF955 /* virtual_gift_demo */,
 				865853BF296BFF9900AAF955 /* Products */,
-				D6EDBA992B509E0389612784 /* Pods */,
 				603D26A0E99E432700C531AA /* Frameworks */,
+				D234015BF5B0AB7D9D8B5E4D /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -88,11 +86,11 @@
 			path = virtual_gift_demo;
 			sourceTree = "<group>";
 		};
-		D6EDBA992B509E0389612784 /* Pods */ = {
+		D234015BF5B0AB7D9D8B5E4D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				D718AC2DF01D66F072BBFFDD /* Pods-virtual_gift_demo.debug.xcconfig */,
-				B8F3EEC1A016106D70FD2765 /* Pods-virtual_gift_demo.release.xcconfig */,
+				3F012DB4A8187A7652E84930 /* Pods-virtual_gift_demo.debug.xcconfig */,
+				15024B7D42C866F2E388B00A /* Pods-virtual_gift_demo.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -104,7 +102,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 865853D2296BFF9B00AAF955 /* Build configuration list for PBXNativeTarget "virtual_gift_demo" */;
 			buildPhases = (
-				624DAF558F42826CBD8B13AD /* [CP] Check Pods Manifest.lock */,
 				865853BA296BFF9900AAF955 /* Sources */,
 				865853BB296BFF9900AAF955 /* Frameworks */,
 				865853BC296BFF9900AAF955 /* Resources */,
@@ -182,28 +179,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-virtual_gift_demo/Pods-virtual_gift_demo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		624DAF558F42826CBD8B13AD /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-virtual_gift_demo-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -358,7 +333,7 @@
 		};
 		865853D3296BFF9B00AAF955 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D718AC2DF01D66F072BBFFDD /* Pods-virtual_gift_demo.debug.xcconfig */;
+			baseConfigurationReference = 3F012DB4A8187A7652E84930 /* Pods-virtual_gift_demo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -391,7 +366,7 @@
 		};
 		865853D4296BFF9B00AAF955 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B8F3EEC1A016106D70FD2765 /* Pods-virtual_gift_demo.release.xcconfig */;
+			baseConfigurationReference = 15024B7D42C866F2E388B00A /* Pods-virtual_gift_demo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

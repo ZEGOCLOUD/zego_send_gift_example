@@ -7,7 +7,7 @@
 
 import UIKit
 import ZegoUIKitPrebuiltLiveAudioRoom
-import ZegoUIKitSDK
+import ZegoUIKit
 import SVGAPlayer
 
 class ViewController: UIViewController {
@@ -124,10 +124,9 @@ extension ViewController: ZegoUIKitPrebuiltLiveAudioRoomVCDelegate,ZegoUIKitEven
     
     //MARK: -ZegoUIKitEventHandle
     func onInRoomTextMessageReceived(_ messages: [ZegoSignalingInRoomTextMessage], roomID: String) {
-        if let message = messages.first,
-           let senderUserID = message.senderUserID
+        if let message = messages.first
         {
-            if senderUserID != self.UserIDTextField.text {
+            if message.senderUserID != self.UserIDTextField.text {
                 //show gift animation
                 self.svgPlayer.frame = CGRect.init(x: 0, y: UIScreen.main.bounds.size.height - 400, width: UIScreen.main.bounds.size.width, height: 300)
                 self.parser.parse(withNamed: "sports-car", in: nil) { videoItem in
