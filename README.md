@@ -10,8 +10,13 @@ This project will show how to implement send virtual gift function. The followin
 ```
 .
 ├── README.md           ---- Project instruction
+│   ├── Android         ---- Flutter demo source 
+│       ├── live_audio_room_gift                ---- Project source code 
+│       ├── live_streaming_with_cohosting_gift  ---- Project source code
 │   ├── Flutter         ---- Flutter demo source 
-│       ├── virtual_gift_demo         ---- Project source code
+│       ├── virtual_gift_demo                   ---- Project source code
+│   ├── iOS             ---- Flutter demo source 
+│       ├── virtual_gift_demo                   ---- Project source code
 ```
 
 
