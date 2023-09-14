@@ -14,10 +14,11 @@ import com.opensource.svgaplayer.SVGAParser;
 import com.opensource.svgaplayer.SVGAParser.ParseCompletion;
 import com.opensource.svgaplayer.SVGAVideoEntity;
 import com.zegocloud.uikit.ZegoUIKit;
-import com.zegocloud.uikit.plugin.common.ZegoSignalingInRoomTextMessage;
+import com.zegocloud.uikit.plugin.adapter.plugins.signaling.ZegoSignalingInRoomTextMessage;
 import com.zegocloud.uikit.prebuilt.livestreaming.ZegoUIKitPrebuiltLiveStreamingFragment;
 import com.zegocloud.uikit.prebuilt.livestreaming.core.ZegoLiveStreamingRole;
 import com.zegocloud.uikit.service.defines.ZegoInRoomCommandListener;
+import com.zegocloud.uikit.service.defines.ZegoUIKitSignalingPluginInRoomTextMessageListener;
 import com.zegocloud.uikit.service.defines.ZegoUIKitUser;
 import com.zegocloud.uikit.utils.Utils;
 import java.io.ByteArrayOutputStream;
@@ -26,6 +27,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Collections;
+import java.util.List;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,6 +43,8 @@ public class GiftHelper {
     private String roomID;
     private String animationFileName = "sports-car.svga";
     private ViewGroup animationViewParent;
+
+    private SVGAVideoEntity cacheSvgaVideoEntity;
 
     public GiftHelper(Context context, long appID, String appSign, String serverSecret, String userID, String userName,
         String roomID, ViewGroup animationViewParent) {
@@ -70,7 +75,7 @@ public class GiftHelper {
         });
 
         // when someone send gift,will receive InRoomCommand or InRoomTextMessage
-        ZegoUIKit.getSignalingPlugin().addInRoomTextMessageListener((messages) -> {
+        ZegoUIKit.getSignalingPlugin().addInRoomTextMessageListener((messages, id) -> {
             if (!messages.isEmpty()) {
                 ZegoSignalingInRoomTextMessage message = messages.get(0);
                 if (!message.senderUserID.equals(userID)) {
@@ -99,26 +104,26 @@ public class GiftHelper {
 
         // click will post json to server
         imageView.setOnClickListener(v -> {
-            final String path = "https://zego-example-server-nextjs.vercel.app/api/send_gift";
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("app_id", appID);
-                jsonObject.put("server_secret", serverSecret);
-                jsonObject.put("room_id", roomID);
-                jsonObject.put("user_id", userID);
-                jsonObject.put("user_name", userName);
-                jsonObject.put("gift_type", 1001);
-                jsonObject.put("gift_count", 1);
-                jsonObject.put("timestamp", System.currentTimeMillis());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            String jsonString = jsonObject.toString();
-            new Thread() {
-                public void run() {
-                    httpPost(path, jsonString, () -> showAnimation());
-                }
-            }.start();
+           final String path = "https://zego-example-server-nextjs.vercel.app/api/send_gift";
+           JSONObject jsonObject = new JSONObject();
+           try {
+               jsonObject.put("app_id", appID);
+               jsonObject.put("server_secret", serverSecret);
+               jsonObject.put("room_id", roomID);
+               jsonObject.put("user_id", userID);
+               jsonObject.put("user_name", userName);
+               jsonObject.put("gift_type", 1001);
+               jsonObject.put("gift_count", 1);
+               jsonObject.put("timestamp", System.currentTimeMillis());
+           } catch (JSONException e) {
+               e.printStackTrace();
+           }
+           String jsonString = jsonObject.toString();
+           new Thread() {
+               public void run() {
+                   httpPost(path, jsonString, () -> showAnimation());
+               }
+           }.start();
         });
     }
 
@@ -167,43 +172,51 @@ public class GiftHelper {
         }
     }
 
-    private void showAnimation() {
+    private  void showAnimation(){
+        if(cacheSvgaVideoEntity == null){
+            SVGAParser.Companion.shareParser().decodeFromAssets(animationFileName, new ParseCompletion() {
+                @Override
+                public void onComplete(@NonNull SVGAVideoEntity svgaVideoEntity) {
+                    cacheSvgaVideoEntity = svgaVideoEntity;
+                    showAnimation2();
+                }
+                @Override
+                public void onError() {
 
-        SVGAParser.Companion.shareParser().decodeFromAssets(animationFileName, new ParseCompletion() {
+                }
+            }, null);
+        }else{
+            showAnimation2();
+        }
+    }
+
+    private void showAnimation2() {
+        SVGAImageView svgaImageView = new SVGAImageView(animationViewParent.getContext());
+        svgaImageView.setLoops(1);
+        animationViewParent.addView(svgaImageView);
+        svgaImageView.setVideoItem(cacheSvgaVideoEntity);
+        svgaImageView.stepToFrame(0, true);
+        svgaImageView.setCallback(new SVGACallback() {
             @Override
-            public void onComplete(@NonNull SVGAVideoEntity svgaVideoEntity) {
-                SVGAImageView svgaImageView = new SVGAImageView(animationViewParent.getContext());
-                svgaImageView.setLoops(1);
-                animationViewParent.addView(svgaImageView);
-                svgaImageView.setVideoItem(svgaVideoEntity);
-                svgaImageView.stepToFrame(0, true);
-                svgaImageView.setCallback(new SVGACallback() {
-                    @Override
-                    public void onPause() {
+            public void onPause() {
 
-                    }
-
-                    @Override
-                    public void onFinished() {
-                        animationViewParent.removeView(svgaImageView);
-                    }
-
-                    @Override
-                    public void onRepeat() {
-
-                    }
-
-                    @Override
-                    public void onStep(int i, double v) {
-
-                    }
-                });
             }
 
             @Override
-            public void onError() {
+            public void onFinished() {
+                animationViewParent.removeView(svgaImageView);
+            }
+
+            @Override
+            public void onRepeat() {
 
             }
-        }, null);
+
+            @Override
+            public void onStep(int i, double v) {
+
+            }
+        });
+
     }
 }
