@@ -3,8 +3,6 @@ package com.zegocloud.uikit.livestreaming;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import androidx.appcompat.app.AppCompatActivity;
-import com.zegocloud.uikit.plugin.common.IZegoUIKitPlugin;
-import com.zegocloud.uikit.plugin.signaling.ZegoSignalingPlugin;
 import com.zegocloud.uikit.prebuilt.livestreaming.ZegoUIKitPrebuiltLiveStreamingConfig;
 import com.zegocloud.uikit.prebuilt.livestreaming.ZegoUIKitPrebuiltLiveStreamingFragment;
 import java.util.Collections;
@@ -31,11 +29,10 @@ public class LiveActivity extends AppCompatActivity {
         String serverSecret = getIntent().getStringExtra("serverSecret");
 
         ZegoUIKitPrebuiltLiveStreamingConfig config;
-        List<IZegoUIKitPlugin> plugins = Collections.singletonList(ZegoSignalingPlugin.getInstance());
         if (isHost) {
-            config = ZegoUIKitPrebuiltLiveStreamingConfig.host(plugins);
+            config = ZegoUIKitPrebuiltLiveStreamingConfig.host(true);
         } else {
-            config = ZegoUIKitPrebuiltLiveStreamingConfig.audience(plugins);
+            config = ZegoUIKitPrebuiltLiveStreamingConfig.audience(true);
             ;
         }
 
