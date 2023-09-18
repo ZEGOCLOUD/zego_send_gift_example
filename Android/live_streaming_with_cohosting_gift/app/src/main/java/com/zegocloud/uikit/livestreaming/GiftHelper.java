@@ -1,6 +1,7 @@
 package com.zegocloud.uikit.livestreaming;
 
 import android.content.Context;
+import android.net.http.HttpResponseCache;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import androidx.annotation.NonNull;
 import com.opensource.svgaplayer.SVGACallback;
+import com.opensource.svgaplayer.SVGADrawable;
 import com.opensource.svgaplayer.SVGAImageView;
 import com.opensource.svgaplayer.SVGAParser;
 import com.opensource.svgaplayer.SVGAParser.ParseCompletion;
@@ -18,22 +20,27 @@ import com.zegocloud.uikit.plugin.adapter.plugins.signaling.ZegoSignalingInRoomT
 import com.zegocloud.uikit.prebuilt.livestreaming.ZegoUIKitPrebuiltLiveStreamingFragment;
 import com.zegocloud.uikit.prebuilt.livestreaming.core.ZegoLiveStreamingRole;
 import com.zegocloud.uikit.service.defines.ZegoInRoomCommandListener;
-import com.zegocloud.uikit.service.defines.ZegoUIKitSignalingPluginInRoomTextMessageListener;
 import com.zegocloud.uikit.service.defines.ZegoUIKitUser;
 import com.zegocloud.uikit.utils.Utils;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GiftHelper {
 
+    private String TAG = "GiftHelper";
     private Handler handler = new Handler(Looper.getMainLooper());
     private long appID;
     private String appSign;
@@ -44,8 +51,9 @@ public class GiftHelper {
     private String animationFileName = "sports-car.svga";
     private ViewGroup animationViewParent;
 
-    private SVGAVideoEntity cacheSvgaVideoEntity;
-
+    private LruCache<String, SVGAVideoEntity> cacheSvgaVideoEntity = new LruCache<>(5, (key, entity) -> {
+        entity.clear();
+    });
     public GiftHelper(Context context, long appID, String appSign, String serverSecret, String userID, String userName,
         String roomID, ViewGroup animationViewParent) {
         initGiftAnimation(context, appID, appSign, serverSecret, userID, userName, roomID, animationViewParent);
@@ -61,7 +69,12 @@ public class GiftHelper {
         this.userName = userName;
         this.roomID = roomID;
         this.animationViewParent = animationViewParent;
-
+        File cacheDir = new File(context.getApplicationContext().getCacheDir(), "http");
+        try {
+            HttpResponseCache.install(cacheDir, 1024 * 1024 * 128);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         SVGAParser.Companion.shareParser().init(context);
 
         // when someone send gift,will receive InRoomCommand or InRoomTextMessage
@@ -69,7 +82,7 @@ public class GiftHelper {
             @Override
             public void onInRoomCommandReceived(ZegoUIKitUser fromUser, String command) {
                 if (!fromUser.userID.equals(userID) && command.contains("gift_type")) {
-                    showAnimation();
+                    showAssetsAnimation(animationFileName);
                 }
             }
         });
@@ -79,7 +92,7 @@ public class GiftHelper {
             if (!messages.isEmpty()) {
                 ZegoSignalingInRoomTextMessage message = messages.get(0);
                 if (!message.senderUserID.equals(userID)) {
-                    showAnimation();
+                    showAssetsAnimation(animationFileName);
                 }
             }
         });
@@ -121,7 +134,7 @@ public class GiftHelper {
            String jsonString = jsonObject.toString();
            new Thread() {
                public void run() {
-                   httpPost(path, jsonString, () -> showAnimation());
+                   httpPost(path, jsonString, () -> showAssetsAnimation(animationFileName));
                }
            }.start();
         });
@@ -150,7 +163,7 @@ public class GiftHelper {
             outwritestream.flush();
             outwritestream.close();
             int code = conn.getResponseCode();
-            Log.d(ZegoUIKit.TAG, "run: " + code);
+            Log.d(TAG, "run: " + code);
             if (code == 200) {
                 InputStream is = conn.getInputStream();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -161,7 +174,7 @@ public class GiftHelper {
                 }
                 is.close();
                 String content = baos.toString();
-                Log.d(ZegoUIKit.TAG, "run() called:" + content);
+                Log.d(TAG, "run() called:" + content);
                 handler.post(successCallback);
             } else {
             }
@@ -172,30 +185,60 @@ public class GiftHelper {
         }
     }
 
-    private  void showAnimation(){
-        if(cacheSvgaVideoEntity == null){
+    private  void showAssetsAnimation(String url){
+        if(cacheSvgaVideoEntity.get(url) == null){
             SVGAParser.Companion.shareParser().decodeFromAssets(animationFileName, new ParseCompletion() {
                 @Override
                 public void onComplete(@NonNull SVGAVideoEntity svgaVideoEntity) {
-                    cacheSvgaVideoEntity = svgaVideoEntity;
-                    showAnimation2();
+                    cacheSvgaVideoEntity.put(url, svgaVideoEntity);
+                    playAnimationView(svgaVideoEntity);
                 }
                 @Override
                 public void onError() {
-
+                    Log.d(TAG, "showAssetsAnimation onError");
                 }
             }, null);
         }else{
-            showAnimation2();
+            playAnimationView(cacheSvgaVideoEntity.get(url));
         }
     }
 
-    private void showAnimation2() {
+    private void showNetworkAnimation(String url){
+       if(cacheSvgaVideoEntity.get(url) == null){
+            try {
+                SVGAParser.Companion.shareParser().decodeFromURL(new URL(url), new ParseCompletion() {
+                    @Override
+                    public void onComplete(@NonNull SVGAVideoEntity svgaVideoEntity) {
+                        cacheSvgaVideoEntity.put(url, svgaVideoEntity);
+                        playAnimationView(svgaVideoEntity);
+                    }
+                    @Override
+                    public void onError() {
+                        Log.d("", "showAssetsAnimation onError");
+                    }
+                }, null);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+       }else{
+           playAnimationView(cacheSvgaVideoEntity.get(url));
+       }
+    }
+
+
+    private void playAnimationView(SVGAVideoEntity svgaVideoEntity) {
         SVGAImageView svgaImageView = new SVGAImageView(animationViewParent.getContext());
         svgaImageView.setLoops(1);
         animationViewParent.addView(svgaImageView);
-        svgaImageView.setVideoItem(cacheSvgaVideoEntity);
+        svgaImageView.setVideoItem(svgaVideoEntity);
         svgaImageView.stepToFrame(0, true);
+        /*!
+          ! If you don't use the cacheSvgaVideoEntity to cache the Entity,
+          ! then you must setClearsAfterDetached here.
+          ! On the contrary, if you use the cacheSvgaVideoEntity to cache,
+          ! the clearing of the entity should be managed by the cache.
+        */
+        // svgaImageView.setClearsAfterDetached(true);
         svgaImageView.setCallback(new SVGACallback() {
             @Override
             public void onPause() {
@@ -204,6 +247,13 @@ public class GiftHelper {
 
             @Override
             public void onFinished() {
+                /*!
+                  ! If you don't use the cacheSvgaVideoEntity to cache the Entity,
+                  ! then you must call the clear method here.
+                  ! On the contrary, if you use the cacheSvgaVideoEntity to cache,
+                  ! the clearing of the entity should be managed by the cache.
+                */
+                // svgaImageView.clear();
                 animationViewParent.removeView(svgaImageView);
             }
 
