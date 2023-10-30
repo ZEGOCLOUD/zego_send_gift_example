@@ -1,36 +1,13 @@
 package com.zegocloud.uikit.prebuilt.liveaudioroomexample;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout.LayoutParams;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.opensource.svgaplayer.SVGACallback;
-import com.opensource.svgaplayer.SVGAImageView;
-import com.opensource.svgaplayer.SVGAParser;
-import com.opensource.svgaplayer.SVGAParser.ParseCompletion;
-import com.opensource.svgaplayer.SVGAVideoEntity;
-import com.zegocloud.uikit.ZegoUIKit;
-import com.zegocloud.uikit.plugin.common.ZegoSignalingInRoomTextMessage;
 import com.zegocloud.uikit.prebuilt.liveaudioroom.ZegoUIKitPrebuiltLiveAudioRoomConfig;
 import com.zegocloud.uikit.prebuilt.liveaudioroom.ZegoUIKitPrebuiltLiveAudioRoomFragment;
 import com.zegocloud.uikit.prebuilt.liveaudioroom.core.ZegoLiveAudioRoomRole;
-import com.zegocloud.uikit.service.defines.ZegoInRoomCommandListener;
-import com.zegocloud.uikit.service.defines.ZegoUIKitUser;
-import com.zegocloud.uikit.utils.Utils;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.zegocloud.uikit.prebuilt.liveaudioroomexample.gift.GiftHelper;
 import java.util.Collections;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class LiveAudioRoomActivity extends AppCompatActivity {
 
@@ -68,8 +45,11 @@ public class LiveAudioRoomActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commitNow();
 
-        ViewGroup rootLayout = findViewById(R.id.layout);
-        GiftHelper helper = new GiftHelper(this, appID, appSign, serverSecret, userID, userName, roomID, rootLayout);
-        helper.addGiftButton(this, fragment);
+        // add a gift button to liveAudioRoom audience
+        GiftHelper giftHelper = new GiftHelper(findViewById(R.id.layout), userID, userName);
+        View giftButton = giftHelper.getGiftButton(this, appID, serverSecret, roomID);
+        fragment.addButtonToBottomMenuBar(Collections.singletonList(giftButton), ZegoLiveAudioRoomRole.AUDIENCE);
+
+
     }
 }

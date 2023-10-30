@@ -1,22 +1,16 @@
-package com.zegocloud.uikit.prebuilt.liveaudioroomexample;
+package com.zegocloud.uikit.prebuilt.liveaudioroomexample.gift;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
-import androidx.annotation.NonNull;
-import com.opensource.svgaplayer.SVGACallback;
-import com.opensource.svgaplayer.SVGAImageView;
-import com.opensource.svgaplayer.SVGAParser;
-import com.opensource.svgaplayer.SVGAParser.ParseCompletion;
-import com.opensource.svgaplayer.SVGAVideoEntity;
 import com.zegocloud.uikit.ZegoUIKit;
-import com.zegocloud.uikit.plugin.common.ZegoSignalingInRoomTextMessage;
-import com.zegocloud.uikit.prebuilt.liveaudioroom.ZegoUIKitPrebuiltLiveAudioRoomFragment;
-import com.zegocloud.uikit.prebuilt.liveaudioroom.core.ZegoLiveAudioRoomRole;
+import com.zegocloud.uikit.plugin.adapter.plugins.signaling.ZegoSignalingInRoomTextMessage;
+import com.zegocloud.uikit.prebuilt.liveaudioroomexample.R;
 import com.zegocloud.uikit.service.defines.ZegoInRoomCommandListener;
 import com.zegocloud.uikit.service.defines.ZegoUIKitUser;
 import com.zegocloud.uikit.utils.Utils;
@@ -25,39 +19,20 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Collections;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GiftHelper {
 
     private Handler handler = new Handler(Looper.getMainLooper());
-    private long appID;
-    private String appSign;
-    private String serverSecret;
+    private GiftAnimation giftAnimation;
     private String userID;
     private String userName;
-    private String roomID;
-    private String animationFileName = "sports-car.svga";
-    private ViewGroup animationViewParent;
 
-    public GiftHelper(Context context, long appID, String appSign, String serverSecret, String userID, String userName,
-        String roomID, ViewGroup animationViewParent) {
-        initGiftAnimation(context, appID, appSign, serverSecret, userID, userName, roomID, animationViewParent);
-    }
-
-    // init svg animation engine
-    private void initGiftAnimation(Context context, long appID, String appSign, String serverSecret, String userID,
-        String userName, String roomID, ViewGroup animationViewParent) {
-        this.appID = appID;
-        this.appSign = appSign;
-        this.serverSecret = serverSecret;
+    public GiftHelper(ViewGroup animationViewParent, String userID, String userName) {
+        giftAnimation = new SVGAAnimation(animationViewParent);
         this.userID = userID;
         this.userName = userName;
-        this.roomID = roomID;
-        this.animationViewParent = animationViewParent;
-
-        SVGAParser.Companion.shareParser().init(context);
 
         // when someone send gift,will receive InRoomCommand or InRoomTextMessage
         ZegoUIKit.addInRoomCommandListener(new ZegoInRoomCommandListener() {
@@ -70,7 +45,7 @@ public class GiftHelper {
         });
 
         // when someone send gift,will receive InRoomCommand or InRoomTextMessage
-        ZegoUIKit.getSignalingPlugin().addInRoomTextMessageListener((messages) -> {
+        ZegoUIKit.getSignalingPlugin().addInRoomTextMessageListener((messages, s) -> {
             if (!messages.isEmpty()) {
                 ZegoSignalingInRoomTextMessage message = messages.get(0);
                 if (!message.senderUserID.equals(userID)) {
@@ -78,10 +53,9 @@ public class GiftHelper {
                 }
             }
         });
-
     }
 
-    public void addGiftButton(Context context, ZegoUIKitPrebuiltLiveAudioRoomFragment fragment) {
+    public View getGiftButton(Context context, long appID, String serverSecret, String roomID) {
         ImageView imageView = new ImageView(context);
         imageView.setImageResource(R.drawable.presents_icon);
         int size = Utils.dp2px(36f, context.getResources().getDisplayMetrics());
@@ -93,10 +67,6 @@ public class GiftHelper {
         layoutParams.bottomMargin = marginBottom;
         layoutParams.rightMargin = marginEnd;
         imageView.setLayoutParams(layoutParams);
-
-        // add a gift button to liveAudioRoom audience
-        fragment.addButtonToBottomMenuBar(Collections.singletonList(imageView), ZegoLiveAudioRoomRole.AUDIENCE);
-
         // click will post json to server
         imageView.setOnClickListener(v -> {
             final String path = "https://zego-example-server-nextjs.vercel.app/api/send_gift";
@@ -120,7 +90,9 @@ public class GiftHelper {
                 }
             }.start();
         });
+        return imageView;
     }
+
 
     /**
      * post json to server,will receive InRoomCommand or InRoomTextMessage callback
@@ -168,42 +140,6 @@ public class GiftHelper {
     }
 
     private void showAnimation() {
-
-        SVGAParser.Companion.shareParser().decodeFromAssets(animationFileName, new ParseCompletion() {
-            @Override
-            public void onComplete(@NonNull SVGAVideoEntity svgaVideoEntity) {
-                SVGAImageView svgaImageView = new SVGAImageView(animationViewParent.getContext());
-                svgaImageView.setLoops(1);
-                animationViewParent.addView(svgaImageView);
-                svgaImageView.setVideoItem(svgaVideoEntity);
-                svgaImageView.stepToFrame(0, true);
-                svgaImageView.setCallback(new SVGACallback() {
-                    @Override
-                    public void onPause() {
-
-                    }
-
-                    @Override
-                    public void onFinished() {
-                        animationViewParent.removeView(svgaImageView);
-                    }
-
-                    @Override
-                    public void onRepeat() {
-
-                    }
-
-                    @Override
-                    public void onStep(int i, double v) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        }, null);
+        giftAnimation.startPlay();
     }
 }
