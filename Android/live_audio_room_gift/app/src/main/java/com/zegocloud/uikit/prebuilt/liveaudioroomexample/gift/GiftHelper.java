@@ -30,7 +30,7 @@ public class GiftHelper {
     private String userName;
 
     public GiftHelper(ViewGroup animationViewParent, String userID, String userName) {
-        giftAnimation = new SVGAAnimation(animationViewParent);
+        giftAnimation = new VAPAnimation(animationViewParent);
         this.userID = userID;
         this.userName = userName;
 
