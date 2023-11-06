@@ -15,6 +15,10 @@
 		865853CE296BFF9B00AAF955 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 865853CC296BFF9B00AAF955 /* LaunchScreen.storyboard */; };
 		865853D6296C020600AAF955 /* LiveAudioHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865853D5296C020600AAF955 /* LiveAudioHeaderView.swift */; };
 		865853D8296C0E9800AAF955 /* sports-car.svga in Resources */ = {isa = PBXBuildFile; fileRef = 865853D7296C0E9800AAF955 /* sports-car.svga */; };
+		8EDF7CF12AF8D13D0053852A /* GiftView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EDF7CF02AF8D13D0053852A /* GiftView.swift */; };
+		8EDF7CF22AF8E0A30053852A /* demo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 8EDF7CEF2AF8D04C0053852A /* demo.mp4 */; };
+		8EDF7CFB2AF8EBF00053852A /* vap.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 8EDF7CFA2AF8EBF00053852A /* vap.mp4 */; };
+		9DD3BD3B5156FCBFCA3A8977 /* Pods_virtual_gift_demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F06F4C7AA83B8B2DE8A4D2D /* Pods_virtual_gift_demo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +34,9 @@
 		865853CF296BFF9B00AAF955 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		865853D5296C020600AAF955 /* LiveAudioHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveAudioHeaderView.swift; sourceTree = "<group>"; };
 		865853D7296C0E9800AAF955 /* sports-car.svga */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sports-car.svga"; sourceTree = "<group>"; };
+		8EDF7CEF2AF8D04C0053852A /* demo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = demo.mp4; sourceTree = "<group>"; };
+		8EDF7CF02AF8D13D0053852A /* GiftView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftView.swift; sourceTree = "<group>"; };
+		8EDF7CFA2AF8EBF00053852A /* vap.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = vap.mp4; sourceTree = "<group>"; };
 		9F06F4C7AA83B8B2DE8A4D2D /* Pods_virtual_gift_demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_virtual_gift_demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -38,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9DD3BD3B5156FCBFCA3A8977 /* Pods_virtual_gift_demo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,11 +84,14 @@
 				865853C1296BFF9900AAF955 /* AppDelegate.swift */,
 				865853C3296BFF9900AAF955 /* SceneDelegate.swift */,
 				865853C5296BFF9900AAF955 /* ViewController.swift */,
+				8EDF7CF02AF8D13D0053852A /* GiftView.swift */,
 				865853D5296C020600AAF955 /* LiveAudioHeaderView.swift */,
 				865853C7296BFF9900AAF955 /* Main.storyboard */,
 				865853CA296BFF9B00AAF955 /* Assets.xcassets */,
 				865853CC296BFF9B00AAF955 /* LaunchScreen.storyboard */,
 				865853CF296BFF9B00AAF955 /* Info.plist */,
+				8EDF7CEF2AF8D04C0053852A /* demo.mp4 */,
+				8EDF7CFA2AF8EBF00053852A /* vap.mp4 */,
 				865853D7296C0E9800AAF955 /* sports-car.svga */,
 			);
 			path = virtual_gift_demo;
@@ -102,6 +113,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 865853D2296BFF9B00AAF955 /* Build configuration list for PBXNativeTarget "virtual_gift_demo" */;
 			buildPhases = (
+				5806EACDD1F4D9C33A97C82F /* [CP] Check Pods Manifest.lock */,
 				865853BA296BFF9900AAF955 /* Sources */,
 				865853BB296BFF9900AAF955 /* Frameworks */,
 				865853BC296BFF9900AAF955 /* Resources */,
@@ -154,8 +166,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8EDF7CF22AF8E0A30053852A /* demo.mp4 in Resources */,
 				865853D8296C0E9800AAF955 /* sports-car.svga in Resources */,
 				865853CE296BFF9B00AAF955 /* LaunchScreen.storyboard in Resources */,
+				8EDF7CFB2AF8EBF00053852A /* vap.mp4 in Resources */,
 				865853CB296BFF9B00AAF955 /* Assets.xcassets in Resources */,
 				865853C9296BFF9900AAF955 /* Main.storyboard in Resources */,
 			);
@@ -181,6 +195,28 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-virtual_gift_demo/Pods-virtual_gift_demo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		5806EACDD1F4D9C33A97C82F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-virtual_gift_demo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -191,6 +227,7 @@
 				865853C6296BFF9900AAF955 /* ViewController.swift in Sources */,
 				865853C2296BFF9900AAF955 /* AppDelegate.swift in Sources */,
 				865853D6296C020600AAF955 /* LiveAudioHeaderView.swift in Sources */,
+				8EDF7CF12AF8D13D0053852A /* GiftView.swift in Sources */,
 				865853C4296BFF9900AAF955 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -339,7 +376,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B82BHJ5H89;
+				DEVELOPMENT_TEAM = PN83KX5U85;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = virtual_gift_demo/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need to use your camera to help you join the audio room interaction.";
@@ -372,7 +409,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B82BHJ5H89;
+				DEVELOPMENT_TEAM = PN83KX5U85;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = virtual_gift_demo/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need to use your camera to help you join the audio room interaction.";

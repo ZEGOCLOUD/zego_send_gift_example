@@ -7,14 +7,9 @@ target 'virtual_gift_demo' do
 
   # Pods for virtual_gift_demo
   pod 'ZegoUIKitPrebuiltLiveAudioRoom'
-  pod 'ZegoUIKitSignalingPlugin','1.2.0'
-  pod 'SVGAPlayer', '~> 2.3'
+  pod 'ZegoUIKitSignalingPlugin'
+  pod 'QGVAPlayer'
 
-end
-
-pre_install do |installer|
-  # workaround for https://github.com/CocoaPods/CocoaPods/issues/3289
-	Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
 end
 
 post_install do |installer|
@@ -22,7 +17,8 @@ post_install do |installer|
       project.targets.each do |target|
           target.build_configurations.each do |config|
               config.build_settings['CODE_SIGN_IDENTITY'] = ''
+              config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
            end
       end
     end
-  end
+end
